@@ -1,0 +1,97 @@
+---
+import { coverageSummary } from '../data/site';
+import { rmComunas, rmMapSource, rmMapViewBox } from '../data/rmMap';
+import { whatsappHref } from '../utils/whatsapp';
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const sorted = [...rmComunas].sort((a, b) => a.name.localeCompare(b.name, 'es'));
+const lampa = rmComunas.find((comuna) => comuna.name === 'Lampa');
+---
+
+<section class:list={['coverage-map', { 'coverage-map--compact': compact }]} data-rm-map>
+  <div class="coverage-map__visual">
+    <div class="coverage-map__panel">
+      <div class="map-info" aria-live="polite">
+        <div class="map-info__name" data-map-name>Pasa el cursor o toca una comuna</div>
+        <div class="map-info__zone" data-map-zone>52 comunas operadas en la RM</div>
+      </div>
+      <svg class="rm-real-map" viewBox={rmMapViewBox} role="img" aria-labelledby="rm-map-title rm-map-desc">
+        <title id="rm-map-title">Mapa de cobertura ItGlass en la Region Metropolitana</title>
+        <desc id="rm-map-desc">Mapa real de comunas de la Region Metropolitana con cobertura de ItGlass.</desc>
+        <text x="380" y="18" class="rm-map-direction" text-anchor="middle">NORTE</text>
+        <text x="380" y="548" class="rm-map-direction" text-anchor="middle">SUR</text>
+        <g>
+          {rmComunas.map((comuna) => (
+            <path
+              d={comuna.path}
+              class="rm-comuna"
+              data-name={comuna.name}
+              data-zone={comuna.zone}
+              data-province={comuna.province}
+              tabindex="0"
+              role="button"
+              aria-label={`${comuna.name}, ${comuna.zone}`}
+            >
+              <title>{comuna.name} - {comuna.zone}</title>
+            </path>
+          ))}
+        </g>
+        {lampa && (
+          <g class="rm-map-base" transform={`translate(${lampa.labelX} ${lampa.labelY})`}>
+            <circle r="7"></circle>
+            <text x="13" y="4">Base Lampa</text>
+          </g>
+        )}
+      </svg>
+      <p class="map-source">Fuente cartografica: <a href={rmMapSource.url} target="_blank" rel="noreferrer">{rmMapSource.label}</a></p>
+    </div>
+  </div>
+  <div class="coverage-map__content">
+    <p class="eyebrow">Cobertura</p>
+    <h2>{coverageSummary.primary}</h2>
+    <p class="lede">{coverageSummary.secondary}</p>
+    <ul class="coverage-zone-list">
+      {coverageSummary.zones.map((zone) => <li>{zone}</li>)}
+    </ul>
+    <details class="coverage-details">
+      <summary>Ver listado de 52 comunas</summary>
+      <div class="coverage-details__list">
+        {sorted.map((comuna) => <span>{comuna.name}</span>)}
+      </div>
+    </details>
+    <div class="button-row">
+      <a class="button button--primary" href={whatsappHref('Hola, quiero saber si ItGlass llega a mi direccion dentro o fuera de la RM')} target="_blank" rel="noreferrer">Preguntar por mi direccion</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const coverageMaps = document.querySelectorAll('[data-rm-map]');
+
+  coverageMaps.forEach((map) => {
+    const infoName = map.querySelector('[data-map-name]');
+    const infoZone = map.querySelector('[data-map-zone]');
+    const comunas = map.querySelectorAll('.rm-comuna');
+
+    const activate = (comuna) => {
+      comunas.forEach((item) => item.classList.remove('is-active'));
+      comuna.classList.add('is-active');
+      if (infoName) infoName.textContent = comuna.dataset.name ?? '';
+      if (infoZone) {
+        const zone = comuna.dataset.zone ?? '';
+        const province = comuna.dataset.province ?? '';
+        infoZone.textContent = province ? `${zone} - Provincia ${province}` : zone;
+      }
+    };
+
+    comunas.forEach((comuna) => {
+      comuna.addEventListener('mouseenter', () => activate(comuna));
+      comuna.addEventListener('focus', () => activate(comuna));
+      comuna.addEventListener('click', () => activate(comuna));
+    });
+  });
+</script>

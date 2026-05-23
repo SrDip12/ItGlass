@@ -1,0 +1,19 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  service: CollectionEntry<'services'>;
+}
+
+const { service } = Astro.props;
+---
+
+<article class="service-card">
+  <p class="eyebrow">{service.data.problem}</p>
+  <h3><a href={`/servicios/${service.data.slug}/`}>{service.data.title}</a></h3>
+  <p class="muted">{service.data.summary}</p>
+  <ul>
+    {service.data.goodFor.slice(0, 3).map((item) => <li>{item}</li>)}
+  </ul>
+  <a class="service-card__action" href={`/servicios/${service.data.slug}/`}>Ver criterio de eleccion</a>
+</article>

@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import FAQList from '../../components/FAQList.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import { localBusinessSchema } from '../../utils/schema';
+import { whatsappHref } from '../../utils/whatsapp';
+
+const posts = (await getCollection('blog')).sort((a, b) => a.data.order - b.data.order);
+const faqs = (await getCollection('faqs')).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+---
+
+<BaseLayout
+  title="Blog ItGlass | Guias sobre termopaneles, PVC y vidrios"
+  description="Guias simples para elegir termopaneles, ventanas PVC, aluminio, grosor de vidrio y shower doors antes de cotizar."
+  schema={localBusinessSchema}
+>
+  <Header />
+  <main>
+    <section class="page-hero page-hero--editorial">
+      <div class="container editorial-hero">
+        <div>
+          <p class="eyebrow">Guias ItGlass</p>
+          <h1>Aprende lo justo antes de cotizar ventanas y vidrios.</h1>
+          <p class="lede">Contenido directo para elegir material, entender precios y llegar a WhatsApp con mejores preguntas.</p>
+        </div>
+        <aside class="quote-panel">
+          <p class="eyebrow">Regla practica</p>
+          <p>No se cotiza "una ventana". Se cotiza el problema: frio, ruido, seguridad, condensacion o terminacion.</p>
+          <a class="service-card__action" href={whatsappHref('Hola, quiero orientacion antes de cotizar ventanas o vidrios')} target="_blank" rel="noreferrer">Preguntar ahora</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="blog-grid">
+          {posts.map((post, index) => <BlogCard post={post} featured={index === 0} />)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--paper">
+      <div class="container section-grid">
+        <div class="section-heading">
+          <p class="eyebrow">Preguntas frecuentes</p>
+          <h2>Respuestas rapidas antes de escribir.</h2>
+        </div>
+        <div class="section-copy">
+          <FAQList faqs={faqs} compact />
+          <div class="button-row" style="margin-top: 24px;">
+            <a class="button button--secondary" href="/preguntas-frecuentes/">Ver todas las preguntas</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <WhatsAppButton />
+</BaseLayout>

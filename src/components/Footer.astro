@@ -1,0 +1,34 @@
+---
+import { contact, coverage, navItems } from '../data/site';
+import { whatsappHref } from '../utils/whatsapp';
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div>
+      <a class="brand" href="/" aria-label="Inicio ItGlass">
+        <img src="/logo-itglass.svg" alt="" width="34" height="38" />
+        <span>ItGlass</span>
+      </a>
+      <p class="muted" style="margin-top: 16px; max-width: 560px;">
+        Termopaneles, ventanas PVC, aluminio y soluciones de vidrio para casas y ampliaciones en toda la Region Metropolitana.
+      </p>
+    </div>
+    <div>
+      <p class="eyebrow">Contacto</p>
+      <ul class="footer-list">
+        <li><a href={whatsappHref()} target="_blank" rel="noreferrer">{contact.phoneDisplay}</a></li>
+        <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
+        <li>{contact.address}</li>
+        <li>{contact.hours}</li>
+      </ul>
+    </div>
+    <div>
+      <p class="eyebrow">Mapa del sitio</p>
+      <ul class="footer-list">
+        {navItems.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        <li>{coverage.slice(0, 4).join(', ')}</li>
+      </ul>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,223 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import WorkCard from '../components/WorkCard.astro';
+import BlogCard from '../components/BlogCard.astro';
+import FAQList from '../components/FAQList.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import CoverageMap from '../components/CoverageMap.astro';
+import { contact } from '../data/site';
+import { localBusinessSchema } from '../utils/schema';
+import { whatsappHref } from '../utils/whatsapp';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const works = (await getCollection('works')).sort((a, b) => a.data.order - b.data.order).slice(0, 3);
+const posts = (await getCollection('blog')).sort((a, b) => a.data.order - b.data.order).slice(0, 3);
+const faqs = (await getCollection('faqs')).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+const title = 'ItGlass | Termopaneles y ventanas PVC en toda la RM';
+const description = 'Instalacion garantizada de termopaneles, ventanas PVC, aluminio y vidrios en toda la Region Metropolitana. Fuera de la RM se conversa.';
+---
+
+<BaseLayout title={title} description={description} schema={localBusinessSchema}>
+  <Header />
+  <main>
+    <section class="hero hero--kinetic">
+      <div class="container hero__inner">
+        <div class="hero__content">
+          <p class="eyebrow">Termopaneles - PVC - Vidrios</p>
+          <h1>Ventanas que aislan. Instalacion que responde.</h1>
+          <p class="lede">
+            Medimos, fabricamos e instalamos soluciones de vidrio para casas y ampliaciones en toda la Region Metropolitana. Fuera de la RM se conversa por WhatsApp.
+          </p>
+          <div class="button-row">
+            <a class="button button--primary" href={whatsappHref()} target="_blank" rel="noreferrer">Cotizar por WhatsApp</a>
+            <a class="button button--ghost" href="#obras">Ver trabajos</a>
+          </div>
+          <ul class="hero-proof">
+            <li>Menos ruido exterior</li>
+            <li>Mejor control de temperatura</li>
+            <li>Materiales con marcas reconocibles</li>
+            <li>Instalacion en terreno</li>
+          </ul>
+        </div>
+        <div class="glass-stage" aria-hidden="true">
+          <div class="glass-stage__frame">
+            <span class="glass-pane glass-pane--one"></span>
+            <span class="glass-pane glass-pane--two"></span>
+            <span class="glass-pane glass-pane--three"></span>
+            <span class="glass-line glass-line--one"></span>
+            <span class="glass-line glass-line--two"></span>
+            <span class="measure measure--top">RM completa</span>
+            <span class="measure measure--side">PVC + termopanel</span>
+          </div>
+          <div class="quote-ticket">
+            <span>Cotizacion directa</span>
+            <strong>{contact.phoneDisplay}</strong>
+            <small>Fotos + medidas + comuna</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <TrustStrip />
+
+    <section class="section section--paper">
+      <div class="container">
+        <CoverageMap />
+      </div>
+    </section>
+
+    <section id="obras" class="section">
+      <div class="container">
+        <div class="section-grid">
+          <div class="section-heading">
+            <p class="eyebrow">01 - Trabajos</p>
+            <h2>Obras visibles antes de pedir una cotizacion.</h2>
+          </div>
+          <div class="section-copy">
+            <p class="lede">
+              La decision se toma mirando instalaciones reales: terminaciones, perfiles, escala y cuidado en obra. Esta galeria queda lista para crecer con fotos de casas, ampliaciones, shower doors y despachos.
+            </p>
+            <div class="button-row">
+              <a class="button button--secondary" href="/galeria/">Ver galeria</a>
+              <a class="button button--primary" href={whatsappHref('Hola, quiero cotizar una instalacion similar a las obras de ItGlass')} target="_blank" rel="noreferrer">Cotizar por WhatsApp</a>
+            </div>
+          </div>
+        </div>
+        <div class="work-grid">
+          {works.map((work) => <WorkCard work={work} />)}
+        </div>
+      </div>
+    </section>
+
+    <section id="servicios" class="section section--paper">
+      <div class="container">
+        <div class="section-grid">
+          <div class="section-heading">
+            <p class="eyebrow">02 - Servicios</p>
+            <h2>El material correcto segun clima, ruido, presupuesto y uso.</h2>
+          </div>
+          <div class="section-copy">
+            <p class="lede">
+              No todas las ventanas resuelven el mismo problema. ItGlass ayuda a elegir entre PVC, aluminio, termopanel o vidrio templado con criterio tecnico y presupuesto aterrizado.
+            </p>
+          </div>
+        </div>
+        <div class="service-grid">
+          {services.map((service) => <ServiceCard service={service} />)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-grid">
+          <div class="section-heading">
+            <p class="eyebrow">03 - Aprende antes de cotizar</p>
+            <h2>Guias para elegir sin comprar a ciegas.</h2>
+          </div>
+          <div class="section-copy">
+            <p class="lede">
+              Termopanel, grosor de vidrio, PVC o aluminio: respuestas practicas para que la conversacion por WhatsApp parta con mejor informacion.
+            </p>
+            <div class="button-row">
+              <a class="button button--secondary" href="/blog/">Ver blog</a>
+              <a class="button button--ghost" href="/preguntas-frecuentes/">Preguntas frecuentes</a>
+            </div>
+          </div>
+        </div>
+        <div class="blog-grid blog-grid--home">
+          {posts.map((post) => <BlogCard post={post} />)}
+        </div>
+        <div class="home-faq-strip">
+          <FAQList faqs={faqs} compact />
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--navy">
+      <div class="container">
+        <div class="section-grid">
+          <div class="section-heading">
+            <p class="eyebrow">04 - Confianza</p>
+            <h2>Termopanel bien instalado: confort primero, vidrio despues.</h2>
+          </div>
+          <div class="section-copy">
+            <p class="lede">
+              El termopanel funciona cuando la medicion, el perfil, el sello y la instalacion trabajan juntos. El ahorro, la baja de ruido y la condensacion dependen de esa combinacion, no solo del vidrio.
+            </p>
+          </div>
+        </div>
+        <div class="proof-grid">
+          <div class="proof-panel">
+            <strong>01</strong>
+            <h3>Aislacion</h3>
+            <p class="muted">Camara sellada y perfil correcto para reducir intercambio de temperatura entre interior y exterior.</p>
+          </div>
+          <div class="proof-panel">
+            <strong>02</strong>
+            <h3>Ruido</h3>
+            <p class="muted">La composicion del vidrio y el sello ayudan a bajar ruido percibido; la ficha tecnica define el rendimiento exacto.</p>
+          </div>
+          <div class="proof-panel">
+            <strong>03</strong>
+            <h3>Durabilidad</h3>
+            <p class="muted">Una instalacion prolija protege el sello, evita filtraciones y mantiene la ventana alineada en el tiempo.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container split-panel">
+        <div class="split-panel__main">
+          <p class="eyebrow">Negocio familiar</p>
+          <h2>Atencion directa con Jaime y equipo.</h2>
+          <p class="lede" style="margin-top: 22px;">
+            ItGlass separa la cotizacion generica del trabajo serio: visita, medicion, recomendacion de material y conversacion clara por WhatsApp antes de fabricar.
+          </p>
+          <dl class="fact-list">
+            <div>
+              <dt>Direccion</dt>
+              <dd>{contact.address}</dd>
+            </div>
+            <div>
+              <dt>Horario</dt>
+              <dd>{contact.hours}</dd>
+            </div>
+            <div>
+              <dt>Cobertura</dt>
+              <dd>Toda la Region Metropolitana. Fuera de la RM se conversa segun distancia y proyecto.</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="split-panel__side">
+          <p class="eyebrow">Fuera de la RM</p>
+          <h3>Se conversa segun distancia y tipo de proyecto.</h3>
+          <p class="muted" style="margin-top: 16px;">Si la obra esta fuera de la Region Metropolitana, envia ubicacion, fotos y medidas por WhatsApp para revisar factibilidad.</p>
+          <div class="button-row" style="margin-top: 28px;">
+            <a class="button button--primary" href={whatsappHref('Hola, quiero cotizar fuera de la RM y revisar factibilidad')} target="_blank" rel="noreferrer">Consultar factibilidad</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-band">
+      <div class="container contact-band__inner">
+        <div class="contact-band__copy">
+          <p class="eyebrow">Cotizacion directa</p>
+          <h2>Envia medidas, fotos o ubicacion por WhatsApp.</h2>
+        </div>
+        <div class="contact-band__action">
+          <a class="button button--secondary" href={whatsappHref()} target="_blank" rel="noreferrer">{contact.phoneDisplay}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <WhatsAppButton />
+</BaseLayout>

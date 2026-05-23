@@ -1,0 +1,13 @@
+---
+import { whatsappHref } from '../utils/whatsapp';
+
+interface Props {
+  message?: string;
+}
+
+const { message } = Astro.props;
+---
+
+<a class="whatsapp-float" href={whatsappHref(message)} target="_blank" rel="noreferrer" aria-label="Cotizar por WhatsApp">
+  WA
+</a>

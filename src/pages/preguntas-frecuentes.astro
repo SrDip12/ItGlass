@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FAQList from '../components/FAQList.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { faqPageSchema, localBusinessSchema } from '../utils/schema';
+import { whatsappHref } from '../utils/whatsapp';
+
+const faqs = (await getCollection('faqs')).sort((a, b) => a.data.order - b.data.order);
+const categories = [...new Set(faqs.map((faq) => faq.data.category))];
+const schema = [
+  localBusinessSchema,
+  faqPageSchema(faqs.map((faq) => ({
+    question: faq.data.question,
+    answer: faq.data.answer
+  })))
+];
+---
+
+<BaseLayout
+  title="Preguntas frecuentes | ItGlass"
+  description="Respuestas sobre termopaneles, grosor de vidrio, PVC, aluminio, condensacion, shower doors y cotizaciones por WhatsApp."
+  schema={schema}
+>
+  <Header />
+  <main>
+    <section class="page-hero page-hero--editorial">
+      <div class="container editorial-hero">
+        <div>
+          <p class="eyebrow">FAQ ItGlass</p>
+          <h1>Preguntas utiles antes de comprar ventanas o vidrios.</h1>
+          <p class="lede">Respuestas cortas, sin vueltas, para decidir mejor y cotizar con informacion clara.</p>
+        </div>
+        <aside class="quote-panel">
+          <p class="eyebrow">Categorias</p>
+          <ul class="mini-tag-list">
+            {categories.map((category) => <li>{category}</li>)}
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container faq-page-grid">
+        <div>
+          <p class="eyebrow">Respuestas rapidas</p>
+          <h2>Termopanel, PVC, aluminio, grosor y cotizacion.</h2>
+          <p class="lede" style="margin-top: 18px;">Si una respuesta no calza con tu caso, envia foto y medida por WhatsApp. El vano real siempre manda.</p>
+          <div class="button-row" style="margin-top: 24px;">
+            <a class="button button--primary" href={whatsappHref('Hola, tengo una pregunta sobre ventanas o vidrios')} target="_blank" rel="noreferrer">Preguntar por WhatsApp</a>
+          </div>
+        </div>
+        <FAQList faqs={faqs} />
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <WhatsAppButton />
+</BaseLayout>

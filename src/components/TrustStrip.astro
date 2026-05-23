@@ -1,0 +1,13 @@
+---
+import { trustSignals } from '../data/site';
+---
+
+<section class="trust-strip" aria-label="Senales de confianza">
+  <div class="container trust-strip__inner">
+    {trustSignals.map((signal) => (
+      <div class="trust-strip__item">
+        <strong>{signal}</strong>
+      </div>
+    ))}
+  </div>
+</section>

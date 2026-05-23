@@ -1,0 +1,57 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import { blogPostSchema } from '../../utils/schema';
+import { whatsappHref } from '../../utils/whatsapp';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const schema = blogPostSchema({
+  title: post.data.title,
+  summary: post.data.summary,
+  slug: post.data.slug,
+  date: post.data.date,
+  updated: post.data.updated
+});
+---
+
+<BaseLayout title={`${post.data.title} | ItGlass`} description={post.data.summary} schema={schema}>
+  <Header />
+  <main>
+    <section class="page-hero article-hero">
+      <div class="container">
+        <p class="eyebrow">{post.data.category} - {post.data.readingTime}</p>
+        <h1>{post.data.title}</h1>
+        <p class="lede">{post.data.heroNote}</p>
+      </div>
+    </section>
+
+    <section class="container article-layout">
+      <article class="article-body">
+        <Content />
+      </article>
+      <aside class="article-aside">
+        <p class="eyebrow">Cotiza con contexto</p>
+        <h3>Envia fotos, medidas y el problema que quieres resolver.</h3>
+        <p class="muted">Asi la recomendacion parte mejor: material, vidrio, apertura y posible visita tecnica.</p>
+        <div class="button-row">
+          <a class="button button--primary" href={whatsappHref(post.data.whatsappText)} target="_blank" rel="noreferrer">Abrir WhatsApp</a>
+          {post.data.relatedService && <a class="button button--secondary" href={post.data.relatedService}>Ver servicio</a>}
+        </div>
+      </aside>
+    </section>
+  </main>
+  <Footer />
+  <WhatsAppButton message={post.data.whatsappText} />
+</BaseLayout>

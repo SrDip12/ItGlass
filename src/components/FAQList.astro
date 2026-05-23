@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { whatsappHref } from '../utils/whatsapp';
+
+interface Props {
+  faqs: CollectionEntry<'faqs'>[];
+  compact?: boolean;
+}
+
+const { faqs, compact = false } = Astro.props;
+---
+
+<div class:list={['faq-list', { 'faq-list--compact': compact }]}>
+  {faqs.map((faq) => (
+    <details class="faq-item">
+      <summary>
+        <span>{faq.data.question}</span>
+      </summary>
+      <div class="faq-item__body">
+        <p>{faq.data.answer}</p>
+        <div class="button-row">
+          {faq.data.relatedUrl && <a class="button button--secondary" href={faq.data.relatedUrl}>Ver servicio</a>}
+          <a class="button button--ghost" href={whatsappHref(faq.data.whatsappText)} target="_blank" rel="noreferrer">Preguntar por WhatsApp</a>
+        </div>
+      </div>
+    </details>
+  ))}
+</div>

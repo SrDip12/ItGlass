@@ -1,0 +1,76 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import { serviceSchema } from '../../utils/schema';
+import { whatsappHref } from '../../utils/whatsapp';
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  return services.map((service) => ({
+    params: { slug: service.data.slug },
+    props: { service }
+  }));
+}
+
+const { service } = Astro.props;
+const schema = serviceSchema({
+  title: service.data.title,
+  summary: service.data.summary,
+  slug: service.data.slug
+});
+---
+
+<BaseLayout title={`${service.data.title} | ItGlass`} description={service.data.summary} schema={schema}>
+  <Header />
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">Servicio</p>
+        <h1>{service.data.title}</h1>
+        <p class="lede">{service.data.summary}</p>
+        <div class="button-row" style="margin-top: 28px;">
+          <a class="button button--primary" href={whatsappHref(service.data.whatsappText)} target="_blank" rel="noreferrer">Cotizar este servicio</a>
+          <a class="button button--ghost" href="/galeria/">Ver trabajos</a>
+        </div>
+      </div>
+    </section>
+    <section class="container service-detail">
+      <div class="service-detail__content">
+        <div class="detail-list">
+          <section>
+            <p class="eyebrow">Problema que resuelve</p>
+            <h2>{service.data.problem}</h2>
+            <p class="lede">{service.data.summary}</p>
+          </section>
+          <section>
+            <p class="eyebrow">Cuando conviene</p>
+            <h2>Buen calce del material</h2>
+            <ul class="number-list">
+              {service.data.goodFor.map((item) => <li>{item}</li>)}
+            </ul>
+          </section>
+          <section>
+            <p class="eyebrow">Precio</p>
+            <h2>Factores que mueven la cotizacion</h2>
+            <ul class="number-list">
+              {service.data.priceFactors.map((item) => <li>{item}</li>)}
+            </ul>
+          </section>
+        </div>
+      </div>
+      <aside class="service-detail__aside">
+        <p class="eyebrow">Marcas y materiales</p>
+        <h3>{service.data.brands.length ? service.data.brands.join(', ') : 'Segun disponibilidad tecnica'}</h3>
+        <p class="muted" style="margin-top: 16px;">Envia fotos, medidas aproximadas y comuna para orientar material, perfil y rango de trabajo.</p>
+        <div class="button-row" style="margin-top: 24px;">
+          <a class="button button--primary" href={whatsappHref(service.data.whatsappText)} target="_blank" rel="noreferrer">Abrir WhatsApp</a>
+        </div>
+      </aside>
+    </section>
+  </main>
+  <Footer />
+  <WhatsAppButton message={service.data.whatsappText} />
+</BaseLayout>

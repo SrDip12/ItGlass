@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import CoverageMap from '../components/CoverageMap.astro';
+import { contact } from '../data/site';
+import { localBusinessSchema } from '../utils/schema';
+import { whatsappHref } from '../utils/whatsapp';
+---
+
+<BaseLayout
+  title="Contacto | ItGlass"
+  description="Contacta a ItGlass por WhatsApp para cotizar termopaneles, ventanas PVC, aluminio y vidrios en Santiago Norte."
+  schema={localBusinessSchema}
+>
+  <Header />
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">Contacto</p>
+        <h1>La cotizacion parte por WhatsApp.</h1>
+        <p class="lede">Envia fotos, medidas aproximadas, comuna y el problema que quieres resolver: frio, ruido, condensacion, seguridad o terminacion.</p>
+        <div class="button-row" style="margin-top: 28px;">
+          <a class="button button--primary" href={whatsappHref()} target="_blank" rel="noreferrer">{contact.phoneDisplay}</a>
+          <a class="button button--secondary" href={`mailto:${contact.email}`}>{contact.email}</a>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container contact-facts">
+        <p class="eyebrow">Datos utiles</p>
+        <h2>Direccion, horario y contacto directo.</h2>
+        <dl class="fact-list">
+          <div>
+            <dt>Direccion</dt>
+            <dd>{contact.address}</dd>
+          </div>
+          <div>
+            <dt>Horario</dt>
+            <dd>{contact.hours}</dd>
+          </div>
+          <div>
+            <dt>Telefono</dt>
+            <dd><a href={whatsappHref()} target="_blank" rel="noreferrer">{contact.phoneDisplay}</a></dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+    <section class="section section--paper">
+      <div class="container">
+        <CoverageMap compact />
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <WhatsAppButton />
+</BaseLayout>

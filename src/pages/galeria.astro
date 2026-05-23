@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WorkCard from '../components/WorkCard.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { localBusinessSchema } from '../utils/schema';
+import { whatsappHref } from '../utils/whatsapp';
+
+const works = (await getCollection('works')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  title="Galeria de trabajos | ItGlass"
+  description="Galeria de trabajos de vidrieria, termopaneles, ventanas PVC, aluminio y shower doors de ItGlass en Santiago Norte."
+  schema={localBusinessSchema}
+>
+  <Header />
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">Galeria</p>
+        <h1>Trabajos para revisar terminaciones antes de cotizar.</h1>
+        <p class="lede">Casas, ampliaciones, cierres, shower doors y despachos. La galeria esta pensada para crecer con registros reales de cada obra.</p>
+        <div class="button-row" style="margin-top: 28px;">
+          <a class="button button--primary" href={whatsappHref('Hola, quiero cotizar despues de ver la galeria de ItGlass')} target="_blank" rel="noreferrer">Cotizar por WhatsApp</a>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="work-grid">
+          {works.map((work) => <WorkCard work={work} />)}
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <WhatsAppButton />
+</BaseLayout>

@@ -1,0 +1,23 @@
+---
+import { contact, navItems } from '../data/site';
+import { whatsappHref } from '../utils/whatsapp';
+
+const path = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href="/" aria-label="Inicio ItGlass">
+      <img src="/logo-itglass.svg" alt="" width="34" height="38" />
+      <span>ItGlass</span>
+    </a>
+    <nav class="nav" aria-label="Navegacion principal">
+      {navItems.map((item) => (
+        <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+    <a class="button button--primary header-cta" href={whatsappHref()} target="_blank" rel="noreferrer">
+      WhatsApp
+    </a>
+  </div>
+</header>

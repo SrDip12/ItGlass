@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { whatsappHref } from '../utils/whatsapp';
+
+interface Props {
+  work: CollectionEntry<'works'>;
+}
+
+const { work } = Astro.props;
+---
+
+<article class="work-card">
+  <div class="work-card__media">
+    <img src={work.data.image} alt={work.data.imageAlt} loading="lazy" />
+  </div>
+  <div class="work-card__body">
+    <div class="work-card__meta">
+      <span>{work.data.category}</span>
+      <span>{work.data.location}</span>
+    </div>
+    <h3>{work.data.title}</h3>
+    <p class="muted">{work.data.summary}</p>
+    <ul>
+      {work.data.highlights.map((item) => <li>{item}</li>)}
+    </ul>
+    <a class="service-card__action" href={whatsappHref(work.data.whatsappText)} target="_blank" rel="noreferrer">Cotizar algo similar</a>
+  </div>
+</article>

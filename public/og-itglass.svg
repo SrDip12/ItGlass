@@ -1,0 +1,9 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#FDF9EF"/>
+  <path d="M0 96H1200M0 224H1200M0 352H1200M0 480H1200M120 0V630M360 0V630M600 0V630M840 0V630M1080 0V630" stroke="#E2DDD3" stroke-width="2"/>
+  <rect x="72" y="72" width="1056" height="486" fill="#FDFBF7" stroke="#0B2545" stroke-width="2"/>
+  <text x="116" y="172" fill="#715B3E" font-family="Jost, Arial, sans-serif" font-size="28" font-weight="700">ITGLASS - SANTIAGO NORTE</text>
+  <text x="116" y="278" fill="#0B2545" font-family="Georgia, serif" font-size="72">Termopaneles y ventanas PVC</text>
+  <text x="116" y="360" fill="#1C1C16" font-family="Jost, Arial, sans-serif" font-size="34">Instalacion garantizada, cotizacion directa por WhatsApp.</text>
+  <path d="M873 462V146H1086V526H930L948 486L1025 472L1070 436C1067 424 1060 419 1049 419L1004 434H946L935 421L964 411C976 404 973 389 959 386H918L873 462Z" fill="#0B2545"/>
+</svg>
